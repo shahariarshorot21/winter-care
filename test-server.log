@@ -1,0 +1,34 @@
+
+> winter-care-client@0.1.0 start
+> next start -p 3102
+
+▲ Next.js 16.4.3
+- Local:         http://localhost:3102
+- Network:       http://192.168.0.101:3102
+✓ Ready in 294ms
+✓ Running next.config.ts took 42ms
+[2m2026-11-02T16:35:27.614Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+[2m2026-11-02T16:35:27.615Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+[2m2026-11-02T16:35:27.616Z[0m [33mWARN[0m [1m[Better Auth]:[0m Social provider google is missing clientId or clientSecret
+[2m2026-11-02T16:35:27.624Z[0m [31mERROR[0m [1m[Better Auth]:[0m Database schema mismatch
+
+  Missing tables
+    user, session, account, verification
+
+  help: Run `npx auth migrate` to add the missing tables and columns.
+⨯ [Error [BetterAuthError]: Database schema mismatch
+
+  Missing tables
+    user, session, account, verification
+
+  help: Run `npx auth migrate` to add the missing tables and columns.] {
+  findings: [
+    { kind: 'missing-table', table: 'user' },
+    { kind: 'missing-table', table: 'session' },
+    { kind: 'missing-table', table: 'account' },
+    { kind: 'missing-table', table: 'verification' }
+  ],
+  source: 'database',
+  code: 'SCHEMA_MISMATCH'
+}
+^C
