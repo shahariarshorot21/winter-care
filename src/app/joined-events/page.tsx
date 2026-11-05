@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarDaysIcon, MapPinIcon, Trash2Icon, ArrowLeftIcon } from "lucide-react";
+import { CalendarDaysIcon, MapPinIcon, Trash2Icon, ArrowLeftIcon, XCircleIcon } from "lucide-react";
 
 export default function JoinedEventsPage() {
   const [joinedEvents, setJoinedEvents] = useState<any[]>([]);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const loadJoinedEvents = () => {
@@ -27,13 +28,7 @@ export default function JoinedEventsPage() {
     };
   }, []);
 
-  const handleDelete = (eventId: string) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to leave this event?"
-    );
-
-    if (!confirmDelete) return;
-
+  const handleLeaveEvent = (eventId: string) => {
     const updatedEvents = joinedEvents.filter(
       (event) => event.id !== eventId
     );
@@ -44,10 +39,31 @@ export default function JoinedEventsPage() {
     );
 
     setJoinedEvents(updatedEvents);
+
+    // Show top-center toast notification like the image
+    setToastMessage("Event left successfully!");
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 3000);
   };
 
   return (
-    <div className="min-h-screen bg-stone-50 px-4 py-12">
+    <div className="min-h-screen bg-stone-50 px-4 py-12 relative">
+      
+      {/* Top Center Toast Notification (Like your image) */}
+      {toastMessage && (
+        <div className="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 bg-white border border-stone-200 shadow-2xl rounded-2xl px-6 py-3 flex items-center gap-3 animate-bounce">
+          <XCircleIcon className="w-5 h-5 text-red-500 shrink-0" />
+          <span className="text-sm font-medium text-stone-800">{toastMessage}</span>
+          <button 
+            onClick={() => setToastMessage(null)} 
+            className="text-stone-400 hover:text-stone-600 ml-4 text-sm font-semibold"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       <div className="max-w-6xl mx-auto">
 
         <div className="flex items-center justify-between mb-8">
@@ -62,7 +78,7 @@ export default function JoinedEventsPage() {
           </div>
 
           <Link
-            href="/events"
+            href="/eventss"
             className="flex items-center gap-2 text-sm font-semibold text-stone-600 hover:text-teal-700"
           >
             <ArrowLeftIcon className="w-4 h-4" />
@@ -81,7 +97,7 @@ export default function JoinedEventsPage() {
             </p>
 
             <Link
-              href="/events"
+              href="/eventss"
               className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-semibold"
             >
               Explore Events
@@ -137,7 +153,7 @@ export default function JoinedEventsPage() {
                     </Link>
 
                     <button
-                      onClick={() => handleDelete(event.id)}
+                      onClick={() => handleLeaveEvent(event.id)}
                       className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 text-sm font-semibold cursor-pointer"
                     >
                       <Trash2Icon className="w-4 h-4" />

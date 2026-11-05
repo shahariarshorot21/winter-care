@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CalendarDaysIcon, MapPinIcon, UsersIcon } from "lucide-react";
+import { useState, useEffect } from "react";
 
 type EventItem = {
   id: string;
@@ -18,7 +19,7 @@ type EventItem = {
   image: string;
 };
 
-const upcomingEvents: EventItem[] = [
+const defaultUpcomingEvents: EventItem[] = [
   {
     id: "1",
     title: "Winter Blanket Distribution Drive",
@@ -99,50 +100,24 @@ const upcomingEvents: EventItem[] = [
   },
   {
     id: "7",
-    title: "Warm Jacket Distribution for Kids",
+    title: "Warm Jacket Distribution for Street Children",
     date: "Jan 02",
-    location: "Sylhet Sadar",
+    location: "Dhanmondi, Dhaka",
     participants: 50,
-    spots: 20,
+    spots: 30,
     tag: "Winter Drive",
     tagClassName: "bg-teal-100 text-teal-800 border-teal-200",
     joinedLabel: "volunteers joined",
     image:
-      "https://images.unsplash.com/photo-1542838132-92c53300491e?w=500&auto=format&fit=crop&q=60",
+      "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=500&auto=format&fit=crop&q=60",
   },
   {
     id: "8",
-    title: "Hot Soup & Tea Distribution",
+    title: "Emergency Sweater & Blanket Drive",
     date: "Jan 05",
-    location: "Rajshahi University",
-    participants: 30,
-    spots: 15,
-    tag: "Food Drive",
-    tagClassName: "bg-emerald-100 text-emerald-800 border-emerald-200",
-    joinedLabel: "volunteers joined",
-    image:
-      "https://images.unsplash.com/photo-1547592180-85f173990554?w=500&auto=format&fit=crop&q=60",
-  },
-  {
-    id: "9",
-    title: "Winter Clothes Collection Drive",
-    date: "Jan 08",
-    location: "GEC Circle, Chattogram",
-    participants: 45,
-    spots: 25,
-    tag: "Collection",
-    tagClassName: "bg-indigo-100 text-indigo-800 border-indigo-200",
-    joinedLabel: "volunteers joined",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2ylzz_xqpfN8OxZBwOHw4ZER97DsoMYQ5DXP1XF4oGw&s=10",
-  },
-  {
-    id: "10",
-    title: "Elderly Winter Care Kit Drive",
-    date: "Jan 12",
-    location: "Bogura Sadar",
-    participants: 60,
-    spots: 40,
+    location: "Srimangal, Moulvibazar",
+    participants: 62,
+    spots: 18,
     tag: "Relief",
     tagClassName: "bg-sky-100 text-sky-800 border-sky-200",
     joinedLabel: "volunteers joined",
@@ -150,108 +125,134 @@ const upcomingEvents: EventItem[] = [
       "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=500&auto=format&fit=crop&q=60",
   },
   {
+    id: "9",
+    title: "Warm Meal & Soup Kitchen for Elderly",
+    date: "Jan 08",
+    location: "Sadargate, Barishal",
+    participants: 45,
+    spots: 15,
+    tag: "Food Drive",
+    tagClassName: "bg-emerald-100 text-emerald-800 border-emerald-200",
+    joinedLabel: "volunteers joined",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgFIQ-tCbzAAMpoo2NyM7gUlxbvzPHzV4CGkmYMsPGUA&s",
+  },
+  {
+    id: "10",
+    title: "Youth Winter Clothing Donation",
+    date: "Jan 12",
+    location: "Agrabad, Chattogram",
+    participants: 30,
+    spots: 40,
+    tag: "Collection",
+    tagClassName: "bg-indigo-100 text-indigo-800 border-indigo-200",
+    joinedLabel: "volunteers joined",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRckKuK_xVxkmrJ8iLagTaoyxbcY4s0wypO7NviB_jzSg&s=10",
+  },
+  {
     id: "11",
-    title: "Street Children Blanket Distribution",
+    title: "Mobile Medical Unit for Cold Diseases",
     date: "Jan 15",
-    location: "Kamalapur, Dhaka",
+    location: "Kurigram, Rangpur",
+    participants: 28,
+    spots: 22,
+    tag: "Health Camp",
+    tagClassName: "bg-rose-100 text-rose-800 border-rose-200",
+    joinedLabel: "volunteers joined",
+    image:
+      "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=500&auto=format&fit=crop&q=60",
+  },
+  {
+    id: "12",
+    title: "Charity Cricket Cup for Winter Shelter",
+    date: "Jan 18",
+    location: "Zilla Stadium, Cumilla",
     participants: 80,
     spots: 20,
+    tag: "Fundraiser",
+    tagClassName: "bg-amber-100 text-amber-800 border-amber-200",
+    joinedLabel: "supporters joined",
+    image:
+      "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=500&auto=format&fit=crop&q=60",
+  },
+  {
+    id: "13",
+    title: "Rural Blanket & Shawl Support Drive",
+    date: "Jan 21",
+    location: "Tetulia, Panchagarh",
+    participants: 55,
+    spots: 25,
     tag: "Winter Drive",
     tagClassName: "bg-teal-100 text-teal-800 border-teal-200",
+    joinedLabel: "volunteers joined",
+    image:
+      "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=500&auto=format&fit=crop&q=60",
+  },
+  {
+    id: "14",
+    title: "School Students Clothes Collection",
+    date: "Jan 24",
+    location: "Uttara, Dhaka",
+    participants: 40,
+    spots: 60,
+    tag: "Collection",
+    tagClassName: "bg-indigo-100 text-indigo-800 border-indigo-200",
     joinedLabel: "volunteers joined",
     image:
       "https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=500&auto=format&fit=crop&q=60",
   },
   {
-    id: "12-",
-    title: "Warm Sweater Drive for Schools",
-    date: "Jan 18",
-    location: "Sreemangal, Moulvibazar",
-    participants: 35,
-    spots: 15,
-    tag: "Collection",
-    tagClassName: "bg-indigo-100 text-indigo-800 border-indigo-200",
-    joinedLabel: "volunteers joined",
-    image:
-      "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?w=500&auto=format&fit=crop&q=60",
-  },
-  {
-    id: "13",
-    title: "Winter Emergency Medical Camp",
-    date: "Jan 22",
-    location: "Kurigram Sadar",
-    participants: 40,
-    spots: 30,
-    tag: "Health Camp",
-    tagClassName: "bg-rose-100 text-rose-800 border-rose-200",
-    joinedLabel: "volunteers joined",
-    image:
-      "https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?w=500&auto=format&fit=crop&q=60",
-  },
-  {
-    id: "14",
-    title: "Winter Shelter Support Campaign",
-    date: "Jan 25",
-    location: "Cox's Bazar Sadar",
-    participants: 55,
-    spots: 45,
-    tag: "Relief",
-    tagClassName: "bg-sky-100 text-sky-800 border-sky-200",
-    joinedLabel: "supporters joined",
-    image:
-      "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=500&auto=format&fit=crop&q=60",
-  },
-  {
     id: "15",
-    title: "Hot Meal Distribution for Homeless",
-    date: "Jan 28",
-    location: "Farmgate, Dhaka",
-    participants: 90,
-    spots: 10,
+    title: "Dry Food & Winter Survival Kit Drive",
+    date: "Jan 27",
+    location: "Sunamganj Sadar, Sunamganj",
+    participants: 67,
+    spots: 13,
     tag: "Food Drive",
     tagClassName: "bg-emerald-100 text-emerald-800 border-emerald-200",
     joinedLabel: "volunteers joined",
     image:
-      "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=500&auto=format&fit=crop&q=60",
+      "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=500&auto=format&fit=crop&q=60",
   },
   {
     id: "16",
-    title: "Youth Charity Marathon for Warmth",
-    date: "Feb 01",
-    location: "Hatirjheel, Dhaka",
-    participants: 120,
-    spots: 80,
+    title: "Child & Maternal Health Checkup",
+    date: "Jan 30",
+    location: "Gaibandha Sadar, Gaibandha",
+    participants: 22,
+    spots: 28,
+    tag: "Health Camp",
+    tagClassName: "bg-rose-100 text-rose-800 border-rose-200",
+    joinedLabel: "volunteers joined",
+    image:
+      "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=500&auto=format&fit=crop&q=60",
+  },
+  {
+    id: "17",
+    title: "Winter Art Exhibition & Charity Auction",
+    date: "Feb 03",
+    location: "Shilpakala Academy, Dhaka",
+    participants: 90,
+    spots: 10,
     tag: "Fundraiser",
     tagClassName: "bg-amber-100 text-amber-800 border-amber-200",
     joinedLabel: "supporters joined",
     image:
-      "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=500&auto=format&fit=crop&q=60",
-  },
-  {
-    id: "17",
-    title: "Remote Village Blanket Drive",
-    date: "Feb 05",
-    location: "Bandarban Sadar",
-    participants: 28,
-    spots: 22,
-    tag: "Winter Drive",
-    tagClassName: "bg-teal-100 text-teal-800 border-teal-200",
-    joinedLabel: "volunteers joined",
-    image:
-      "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=500&auto=format&fit=crop&q=60",
+      "https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=500&auto=format&fit=crop&q=60",
   },
   {
     id: "18",
-    title: "Winter Survival Kit Distribution",
-    date: "Feb 10",
-    location: "Panchagarh Sadar",
-    participants: 65,
-    spots: 35,
+    title: "Temporary Shelter & Tarpaulin Distribution",
+    date: "Feb 06",
+    location: "Bogra Sadar, Bogra",
+    participants: 33,
+    spots: 37,
     tag: "Relief",
     tagClassName: "bg-sky-100 text-sky-800 border-sky-200",
     joinedLabel: "volunteers joined",
     image:
-      "https://images.unsplash.com/photo-1469488865564-c2de10f69f96?w=500&auto=format&fit=crop&q=60",
+      "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=500&auto=format&fit=crop&q=60",
   },
 ];
 
@@ -274,7 +275,7 @@ function EventCard({ event }: { event: EventItem }) {
       <div className="bg-stone-100 p-6 flex justify-center items-center min-h-[220px]">
         <div className="relative w-full h-48 shadow-md rounded overflow-hidden">
           <Image
-            src={event.image}
+            src={event.image || "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=500"}
             alt={event.title}
             fill
             className="object-cover"
@@ -289,9 +290,9 @@ function EventCard({ event }: { event: EventItem }) {
               <CalendarDaysIcon className="w-3.5 h-3.5" /> {event.date}
             </span>
             <span
-              className={`text-[11px] font-semibold px-2.5 py-1 rounded-full border ${event.tagClassName}`}
+              className={`text-[11px] font-semibold px-2.5 py-1 rounded-full border ${event.tagClassName || "bg-teal-100 text-teal-800 border-teal-200"}`}
             >
-              {event.tag}
+              {event.tag || "Event"}
             </span>
           </div>
 
@@ -304,8 +305,8 @@ function EventCard({ event }: { event: EventItem }) {
               <MapPinIcon className="w-3.5 h-3.5" /> {event.location}
             </p>
             <p className="flex items-center gap-1.5">
-              <UsersIcon className="w-3.5 h-3.5" /> {event.participants}{" "}
-              {event.joinedLabel}
+              <UsersIcon className="w-3.5 h-3.5" /> {event.participants || 0}{" "}
+              {event.joinedLabel || "volunteers joined"}
             </p>
           </div>
         </div>
@@ -328,9 +329,36 @@ export function Events({
   limit?: number;
   showSeeAll?: boolean;
 }) {
+  const [allEvents, setAllEvents] = useState<EventItem[]>(defaultUpcomingEvents);
+
+  useEffect(() => {
+    try {
+      const customEvents = JSON.parse(
+        localStorage.getItem("myCustomEvents") || "[]"
+      );
+
+      const formattedCustomEvents = customEvents.map((item: any) => ({
+        id: String(item.id),
+        title: item.title || "Untitled Event",
+        date: item.date || "Upcoming",
+        location: item.location || "N/A",
+        participants: item.participants || 0,
+        spots: item.spots || 0,
+        tag: item.tag || "Custom Event",
+        tagClassName: item.tagClassName || "bg-teal-100 text-teal-800 border-teal-200",
+        joinedLabel: item.joinedLabel || "volunteers joined",
+        image: item.image || "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=500",
+      }));
+
+      setAllEvents([...formattedCustomEvents, ...defaultUpcomingEvents]);
+    } catch {
+      // fallback
+    }
+  }, []);
+
   const displayedEvents = limit
-    ? upcomingEvents.slice(0, limit)
-    : upcomingEvents;
+    ? allEvents.slice(0, limit)
+    : allEvents;
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

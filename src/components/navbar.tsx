@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -56,7 +55,6 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b border-teal-900 bg-slate-400 backdrop-blur-md transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-
           {/* Logo */}
           <Link
             className="flex items-center gap-2.5 font-bold text-xl tracking-tight text-foreground group"
@@ -79,7 +77,6 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-5 text-black text-sm font-semibold">
-
             <Link
               className="flex items-center gap-1.5 hover:text-red-900 transition-colors"
               href="/eventss"
@@ -88,7 +85,6 @@ export function Navbar() {
               Upcoming Events
             </Link>
 
-            {/* Add Event */}
             <Link
               className="flex items-center gap-1.5 hover:text-red-900 transition-colors"
               href="/events/create"
@@ -122,13 +118,20 @@ export function Navbar() {
                   onClick={() => setIsOpen(!isOpen)}
                   className="w-10 h-10 rounded-full border-2 border-white overflow-hidden shadow-sm flex items-center justify-center focus:outline-none cursor-pointer"
                 >
-                  <Image
-                    src={user.photoURL}
-                    alt="Profile"
-                    width={40}
-                    height={40}
-                    className="rounded-full object-cover"
-                  />
+                  {user.photoURL ? (
+                    <Image
+                      src={user.photoURL}
+                      alt={user.fullName}
+                      width={40}
+                      height={40}
+                      unoptimized
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-lg font-bold text-white bg-slate-700 w-full h-full flex items-center justify-center">
+                      {user.fullName?.charAt(0)?.toUpperCase() || "U"}
+                    </span>
+                  )}
                 </button>
 
                 {isOpen && (
@@ -188,7 +191,6 @@ export function Navbar() {
         {/* Mobile Menu */}
         {mobileMenu && (
           <div className="md:hidden border-t border-stone-300 py-4 space-y-3 bg-white px-4 rounded-b-2xl shadow-lg">
-
             <Link
               href="/eventss"
               onClick={() => setMobileMenu(false)}
@@ -197,7 +199,6 @@ export function Navbar() {
               Upcoming Events
             </Link>
 
-            {/* Add Event */}
             <Link
               href="/events/create"
               onClick={() => setMobileMenu(false)}

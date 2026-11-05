@@ -1,7 +1,7 @@
+
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
   reactCompiler: true,
@@ -19,6 +19,14 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "thumbs.dreamstime.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.google.com",
+      },
+      {
+        protocol: "https",
+        hostname: "lens.usercontent.google.com",
       },
     ],
   },
