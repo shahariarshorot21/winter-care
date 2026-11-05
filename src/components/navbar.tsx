@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   CalendarDaysIcon,
+  HomeIcon,
   LogInIcon,
   MenuIcon,
   HandHeart,
@@ -79,8 +80,10 @@ export function Navbar() {
           <nav className="hidden lg:flex items-center gap-5 text-black text-sm font-semibold">
             <Link
               href="/"
+              onClick={() => setMobileMenu(false)}
               className="flex items-center gap-1.5 hover:text-red-900 transition-colors"
             >
+              <HomeIcon className="w-4 h-4" />
               Home
             </Link>
             <Link
