@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Mail, Lock, Eye, ArrowRight, User, Image as ImageIcon } from "lucide-react";
+import { Mail, Lock, Eye, ArrowRight, User, Image as ImageIcon, CheckCircle2, X } from "lucide-react";
 import { HandHeart } from "lucide-react";
 
 const Register = () => {
@@ -13,9 +13,22 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [photoURL, setPhotoURL] = useState("");
   const [password, setPassword] = useState("");
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // আগের রেজিস্টার্ড ইউজারদের লিস্ট চেক করা
+    const existingUsers = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
+    
+    // জিমেইল অলরেডি আছে কিনা চেক করা
+    const isEmailTaken = existingUsers.some((user: any) => user.email.toLowerCase() === email.toLowerCase());
+
+    if (isEmailTaken) {
+      setToastMessage("This email is already registered! Please use a different email.");
+      setTimeout(() => setToastMessage(null), 4000);
+      return;
+    }
 
     const finalPhotoURL =
       photoURL.trim() !== ""
@@ -28,16 +41,33 @@ const Register = () => {
       photoURL: finalPhotoURL,
     };
 
-    // সেভ করা এবং নেভবারে আপডেট করার জন্য Event ট্রিগার
+    // নতুন ইউজারকে লিস্টে যুক্ত করা এবং সেভ করা
+    existingUsers.push(userData);
+    localStorage.setItem("registeredUsers", JSON.stringify(existingUsers));
+    
+    // কারেন্ট লগইন ইউজার হিসেবে সেট করা
     localStorage.setItem("user", JSON.stringify(userData));
     window.dispatchEvent(new Event("storage"));
 
-    // সরাসরি হোম পেজে পাঠাবে
-    router.push("/");
+    setToastMessage("Account created successfully!");
+    setTimeout(() => {
+      router.push("/");
+    }, 1500);
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
+    <div className="relative flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
+      {/* টোস্ট নোটিফিকেশন */}
+      {toastMessage && (
+        <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm text-gray-700 shadow-lg transition-all">
+          <CheckCircle2 className="h-4 w-4 text-teal-600" />
+          <span>{toastMessage}</span>
+          <button onClick={() => setToastMessage(null)} className="ml-2 text-gray-400 hover:text-gray-600">
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      )}
+
       <div className="w-full max-w-md space-y-8 rounded-2xl bg-white p-8 shadow-xl border border-gray-100">
         <div className="text-center">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-teal-600 text-white font-bold text-xl shadow-md">

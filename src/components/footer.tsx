@@ -52,7 +52,6 @@ export function Footer() {
 
             <ul className="space-y-2.5 text-sm text-muted-foreground">
               <li>
-
                 <Link
                   className="hover:text-teal-600 transition-colors flex items-center gap-1.5"
                   href="/eventss"
@@ -73,18 +72,20 @@ export function Footer() {
               </li>
 
               <li>
+                {/* Navbar-এর My Events পেজের লিংক অনুযায়ী ঠিক করা হলো */}
                 <Link
                   className="hover:text-teal-600 transition-colors"
-                  href="/deshbord/my-booking"
+                  href="/my-events"
                 >
                   Manage My Events
                 </Link>
               </li>
 
               <li>
+                {/* Navbar-এর Joined Events পেজের লিংক অনুযায়ী ঠিক করা হলো */}
                 <Link
                   className="hover:text-teal-600 transition-colors"
-                  href="/deshbord/my-fasility"
+                  href="/joined-events"
                 >
                   My Joined Events
                 </Link>

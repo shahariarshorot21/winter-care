@@ -78,6 +78,12 @@ export function Navbar() {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-5 text-black text-sm font-semibold">
             <Link
+              href="/"
+              className="flex items-center gap-1.5 hover:text-red-900 transition-colors"
+            >
+              Home
+            </Link>
+            <Link
               className="flex items-center gap-1.5 hover:text-red-900 transition-colors"
               href="/eventss"
             >
