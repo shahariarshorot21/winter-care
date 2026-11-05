@@ -11,7 +11,7 @@ import {
   UserIcon,
   MailIcon,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 
 const defaultEvents = [
   {
@@ -251,8 +251,7 @@ const defaultEvents = [
     description: "Providing complete winter kits including thermal socks, vaseline, and blankets.",
   },
 ];
-
-export default function EventDetailsPage() {
+function EventDetailsContent(){
   const params = useParams();
   const router = useRouter();
 
@@ -465,5 +464,15 @@ export default function EventDetailsPage() {
         </div>
       )}
     </div>
-  );
+  )
+}
+
+
+export default function EventDetailsPage() {
+  return(
+    <Suspense fallback={<p>Looding...</p>}>
+      <EventDetailsContent />
+    </Suspense>
+  )
+  
 }

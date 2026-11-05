@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useState, FormEvent } from "react";
+import { useEffect, useState, FormEvent, Suspense } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { HandHeart, CheckCircle2, X } from "lucide-react";
 
 const inputClassName =
   "w-full rounded-xl border border-[#e8d5c3] bg-white px-4 py-3 text-sm text-[#702b1e] placeholder:text-[#b99b89] outline-none transition focus:border-[#84301f] focus:ring-2 focus:ring-[#84301f]/10";
 
-export default function EditEventPage() {
+
+function EiditDetailsContent() {
   const params = useParams();
   const router = useRouter();
   const eventId = params.id;
@@ -93,10 +94,10 @@ export default function EditEventPage() {
 
       localStorage.setItem("myCustomEvents", JSON.stringify(events));
       
-      // কাস্টম নোটিফিকেশন প্রদর্শন
+
       setToastMessage("Event updated successfully!");
 
-      // ১.৫ সেকেন্ড পর রিডাইরেক্ট করা
+
       setTimeout(() => {
         router.push("/my-events");
       }, 1500);
@@ -105,7 +106,7 @@ export default function EditEventPage() {
 
   return (
     <section className="relative min-h-screen bg-white px-4 py-10 sm:px-6">
-      {/* ২য় ছবির মতো কাস্টম টোস্ট নোটিফিকেশন */}
+
       {toastMessage && (
         <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm text-gray-700 shadow-lg animate-in fade-in slide-in-from-top-4 duration-300">
           <CheckCircle2 className="h-4 w-4 text-emerald-500" />
@@ -261,4 +262,14 @@ export default function EditEventPage() {
       </div>
     </section>
   );
+}
+
+export default function EditEventPage() {
+  return(
+    <Suspense fallback={<p>Looding...</p>}>
+      <EiditDetailsContent />
+    </Suspense>
+    
+  )
+  
 }
