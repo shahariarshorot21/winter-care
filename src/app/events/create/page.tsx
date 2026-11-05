@@ -8,13 +8,15 @@ import {
   Clock4Icon,
   CompassIcon,
   FlameIcon,
-  HeartHandshakeIcon,
   HelpingHandIcon,
+  HandHeart,
+  ImageIcon,
   MapPinIcon,
   MegaphoneIcon,
   SnowflakeIcon,
   SparklesIcon,
   UsersIcon,
+  X,
 } from "lucide-react";
 
 const eventTypes = [
@@ -57,37 +59,64 @@ export default function CreateEventPage() {
   const router = useRouter();
   const [selected, setSelected] = useState<number | null>(null);
   const [created, setCreated] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const selectedType = selected !== null ? eventTypes[selected] : null;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    const inputEmail = formData.get("email") as string;
+    const inputImage = formData.get("image") as string;
+
+    const existingEvents = JSON.parse(localStorage.getItem("myCustomEvents") || "[]");
+
+    const isEmailUsed = existingEvents.some(
+      (event: any) => event.organizer?.email?.toLowerCase() === inputEmail?.toLowerCase()
+    );
+
+    if (isEmailUsed) {
+      setToastMessage("You have already created an event with this email address!");
+      setTimeout(() => setToastMessage(null), 4000);
+      return;
+    }
 
     const newEvent = {
       id: "custom-" + Date.now(),
       title: formData.get("title") as string,
       date: formData.get("date") as string,
+      time: formData.get("time") as string,
       location: formData.get("location") as string,
       participants: 1,
       spots: Number(formData.get("volunteers") || 50),
       tag: "Winter Drive",
       tagClassName: "bg-teal-100 text-teal-800 border-teal-200",
       joinedLabel: "volunteers joined",
-      image: "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=800&auto=format&fit=crop&q=60",
+      image: inputImage.trim() !== "" ? inputImage : "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=800&auto=format&fit=crop&q=60",
       description: formData.get("description") as string,
-      organizer: { name: "Community User", email: "user@wintercare.org" },
+      organizer: { 
+        name: formData.get("name") as string, 
+        email: inputEmail 
+      },
     };
 
-    // Save to localStorage so it shows up in event lists
-    const existingEvents = JSON.parse(localStorage.getItem("myCustomEvents") || "[]");
     localStorage.setItem("myCustomEvents", JSON.stringify([newEvent, ...existingEvents]));
 
     setCreated(true);
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pb-20">
+    <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pb-20">
+      {toastMessage && (
+        <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm text-gray-700 shadow-xl transition-all">
+          <X className="h-4 w-4 text-red-500" />
+          <span className="font-medium">{toastMessage}</span>
+          <button onClick={() => setToastMessage(null)} className="ml-2 text-gray-400 hover:text-gray-600">
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      )}
+
       <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
         <span className="text-xs font-bold uppercase tracking-widest text-teal-600 dark:text-teal-400">
           Create Event
@@ -210,6 +239,52 @@ export default function CreateEventPage() {
           </div>
 
           <div className="space-y-2">
+            <label htmlFor="event-image" className="text-sm font-bold text-foreground">
+              <span className="inline-flex items-center gap-1.5">
+                <ImageIcon className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+                Event Image URL
+              </span>
+            </label>
+            <input
+              id="event-image"
+              name="image"
+              type="url"
+              required
+              placeholder="https://images.unsplash.com/photo-..."
+              className={inputClassName}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label htmlFor="organizer-name" className="text-sm font-bold text-foreground">
+                Your Name
+              </label>
+              <input
+                id="organizer-name"
+                name="name"
+                type="text"
+                required
+                placeholder="Enter your name"
+                className={inputClassName}
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="organizer-email" className="text-sm font-bold text-foreground">
+                Your Email
+              </label>
+              <input
+                id="organizer-email"
+                name="email"
+                type="email"
+                required
+                placeholder="Enter your email"
+                className={inputClassName}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
             <label htmlFor="event-description" className="text-sm font-bold text-foreground">
               Description
             </label>
@@ -225,9 +300,10 @@ export default function CreateEventPage() {
 
           <button
             type="submit"
-            className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-teal-600 text-white font-bold text-sm shadow-lg shadow-teal-600/25 hover:bg-teal-700 cursor-pointer transition-all"
+            className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-amber-700 text-white font-bold text-sm shadow-lg shadow-teal-600/25 hover:bg-teal-700 cursor-pointer transition-all"
           >
-            <HeartHandshakeIcon className="w-4 h-4" />
+            {/* <HeartHandshakeIcon className="w-4 h-4" /> */}
+            <HandHeart className="w-4 h-4" />
             <span>Create Event</span>
           </button>
         </form>

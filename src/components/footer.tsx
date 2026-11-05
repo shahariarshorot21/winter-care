@@ -1,6 +1,8 @@
 import {
   CalendarIcon,
+  CheckCheckIcon,
   GlobeIcon,
+  FolderHeartIcon,
   HeartIcon,
   MapPinIcon,
 } from "lucide-react";
@@ -52,7 +54,6 @@ export function Footer() {
 
             <ul className="space-y-2.5 text-sm text-muted-foreground">
               <li>
-
                 <Link
                   className="hover:text-teal-600 transition-colors flex items-center gap-1.5"
                   href="/eventss"
@@ -74,18 +75,20 @@ export function Footer() {
 
               <li>
                 <Link
-                  className="hover:text-teal-600 transition-colors"
-                  href="/deshbord/my-booking"
+                  className="flex items-center gap-2 hover:text-teal-600 transition-colors"
+                  href="/my-events"
                 >
+                  <FolderHeartIcon className="w-4 h-4" />
                   Manage My Events
                 </Link>
               </li>
 
               <li>
                 <Link
-                  className="hover:text-teal-600 transition-colors"
-                  href="/deshbord/my-fasility"
+                  className="flex items-center gap-2 hover:text-teal-600 transition-colors"
+                  href="/joined-events"
                 >
+                  <CheckCheckIcon className="w-4 h-4" />
                   My Joined Events
                 </Link>
               </li>
@@ -129,8 +132,8 @@ export function Footer() {
 
         <div className="mt-12 pt-6 border-t border-border/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
           <p>
-            © 2026 GoodGather. Built with care for
-            community service and social development.
+            © 2026 GoodGather. Built with care for community service and social
+            development.
           </p>
 
           <div className="flex items-center gap-1 text-xs">

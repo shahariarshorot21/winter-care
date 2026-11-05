@@ -26,7 +26,7 @@ const stats = [
 
 export function Banner() {
   return (
-    <section className="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-28 bg-linear-to-b from-amber-700 via-amber-300 to-transparent">
+    <section className="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-28 bg-linear-to-b from-amber-200 via-amber-300 to-transparent">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(13,148,136,0.18),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(20,184,166,0.22),rgba(0,0,0,0))]" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">

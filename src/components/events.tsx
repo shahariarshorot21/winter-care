@@ -313,7 +313,7 @@ function EventCard({ event }: { event: EventItem }) {
 
         <button
           onClick={handleViewDetails}
-          className="w-full mt-4 inline-flex items-center justify-center px-4 py-2.5 rounded-lg bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold transition-all text-center cursor-pointer"
+          className="w-full mt-4 inline-flex items-center justify-center px-4 py-2.5 rounded-lg bg-amber-800 hover:bg-teal-700 text-white text-sm font-semibold transition-all text-center cursor-pointer"
         >
           View Details
         </button>
